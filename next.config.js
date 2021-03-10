@@ -2,7 +2,7 @@ const withMDX = require('@next/mdx')();
 
 const nextConfig = {
   i18n: {
-    defaultLocale: 'ja',
+    defaultLocale: 'en',
     localeDetection: false,
     locales: ['en', 'ja'],
   },

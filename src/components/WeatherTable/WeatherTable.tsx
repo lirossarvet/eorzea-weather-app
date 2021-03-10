@@ -28,6 +28,31 @@ import Weather from '@/types/Weather';
 import WeatherTableCell from './WeatherTableCell';
 import messages from './intl';
 
+const preferredOrdering = {
+  // It would be better to use the EorzeaWeather constants here but these are the
+  // translated names from the API so here we are
+  "Fair Skies": 1
+}
+
+const getOrderingForWeather = (name) => {
+  return (preferredOrdering[name] || 100000);
+}
+
+const orderingWeatherForHighlightOptions = (nameA, nameB) => {
+  const a = [getOrderingForWeather(nameA), nameA];
+  const b = [getOrderingForWeather(nameB), nameB];
+
+  if (a < b) {
+    return -1;
+  }
+
+  if (a > b) {
+    return 1;
+  }
+
+  return 0;
+}
+
 const useStyles = makeStyles((theme) =>
   createStyles({
     formGroup: {
@@ -147,7 +172,7 @@ const WeatherTable: FC<Props> = ({ zoneID }) => {
 
       {weatherTable ? (
         <FormGroup className={classes.formGroup} row>
-          {uniq(weatherTable.map(({ name }) => name)).map((name) => {
+          {uniq(weatherTable.map(({ name }) => name)).sort(orderingWeatherForHighlightOptions).map((name) => {
             const control = (
               <Switch
                 color="primary"
